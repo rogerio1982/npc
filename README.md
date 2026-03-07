@@ -1,4 +1,4 @@
-# 3D English Tutor NPC Prototype
+# English Tutor 
 
 This repository is a small prototype that provides an English tutor chat conversational. The NPC can speak  and performs simple talking animations.
 
