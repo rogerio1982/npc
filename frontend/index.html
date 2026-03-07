@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>3D English Tutor NPC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div id="scene-container">
+        <!-- Three.js canvas will be injected here -->
+      </div>
+      <div id="ui-container">
+        <div id="camera-controls">
+          <span class="controls-label">Camera</span>
+          <button type="button" id="cam-zoom-in">+</button>
+          <button type="button" id="cam-zoom-out">-</button>
+          <button type="button" id="cam-rotate-left">⟲</button>
+          <button type="button" id="cam-rotate-right">⟳</button>
+        </div>
+        <div id="action-controls">
+          <span class="controls-label">Ações</span>
+          <button type="button" id="action-idle">1</button>
+          <button type="button" id="action-action1">2</button>
+          <button type="button" id="action-action2">3</button>
+        </div>
+        <div id="voice-controls">
+          <button type="button" id="voice-toggle">🎤 Falar</button>
+          <span id="voice-status">Pronto para ouvir</span>
+        </div>
+        <div id="chat-box">
+          <div id="messages"></div>
+        </div>
+        
+      </div>
+    </div>
+
+    <!-- Import map to resolve the bare 'three' specifier used by GLTFLoader -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+        }
+      }
+    </script>
+
+    <script type="module" src="main.js"></script>
+  </body>
+  </html>
+
