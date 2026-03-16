@@ -244,7 +244,26 @@ function speak(text) {
   window.speechSynthesis.speak(utterance);
 }
 
+// ---------------------------------------------------------------------------
+// Session management — persists session_id in localStorage so the
+// conversation survives a page refresh (history is stored server-side in SQLite)
+// ---------------------------------------------------------------------------
+let sessionId = localStorage.getItem("npc_session_id") || null;
+
+async function ensureSession() {
+  if (sessionId) return;
+  try {
+    const res = await fetch("/session/new", { method: "POST" });
+    const data = await res.json();
+    sessionId = data.session_id;
+    localStorage.setItem("npc_session_id", sessionId);
+  } catch (err) {
+    console.error("Could not create session:", err);
+  }
+}
+
 async function sendMessage(message) {
+  await ensureSession();
   addMessage(message, "user");
 
   if (voiceStatusEl) {
@@ -257,7 +276,7 @@ async function sendMessage(message) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ message }),
+      body: JSON.stringify({ message, session_id: sessionId }),
     });
 
     if (!response.ok) {
@@ -265,6 +284,11 @@ async function sendMessage(message) {
     }
 
     const data = await response.json();
+    // Keep local session_id in sync (server may assign one on first message)
+    if (data.session_id && data.session_id !== sessionId) {
+      sessionId = data.session_id;
+      localStorage.setItem("npc_session_id", sessionId);
+    }
     const reply = data.reply || "I'm here to help you practice English.";
     addMessage(reply, "npc");
     speak(reply);
