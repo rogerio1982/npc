@@ -20,7 +20,7 @@ let camHeight = 4;
 let camTargetY = 4.2;
 
 const sceneContainer = document.getElementById("scene-container");
-const messagesEl = document.getElementById("messages");
+const npcResponseEl = document.getElementById("npc-response");
 const voiceToggleBtn = document.getElementById("voice-toggle");
 const voiceStatusEl = document.getElementById("voice-status");
 const camZoomInBtn = document.getElementById("cam-zoom-in");
@@ -191,11 +191,9 @@ function animate() {
 }
 
 function addMessage(text, sender) {
-  const div = document.createElement("div");
-  div.className = `message ${sender}`;
-  div.textContent = text;
-  messagesEl.appendChild(div);
-  messagesEl.scrollTop = messagesEl.scrollHeight;
+  if (sender !== "npc") return;
+  npcResponseEl.textContent = text;
+  npcResponseEl.classList.add("visible");
 }
 
 function speak(text) {
@@ -264,7 +262,6 @@ async function ensureSession() {
 
 async function sendMessage(message) {
   await ensureSession();
-  addMessage(message, "user");
 
   if (voiceStatusEl) {
     voiceStatusEl.textContent = "Thinking...";
@@ -307,10 +304,7 @@ async function sendMessage(message) {
 
 window.addEventListener("DOMContentLoaded", () => {
   initScene();
-  addMessage(
-    "Hello! I'm your 3D English tutor. Type a sentence in English and press Send.",
-    "npc"
-  );
+  addMessage("Hello! I'm your 3D English tutor. Click the button and speak in English.", "npc");
 });
 
 // --- Camera & action control helpers ---
